@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Validator;
 
 class GuruController extends Controller
 {
+ 
+    public function views() {
+        
+        $guru = guru::all();
+        return view("admin.guru.index", compact('guru'));
+    }
    public function index() {
     $guru = guru::all();
      return response([
@@ -53,6 +59,7 @@ class GuruController extends Controller
      return response([
          'guru' => $guru,
          'akun' => $akun,
+         'message' => 'success',
      ],200);
     }
     public function show($id) {
@@ -65,6 +72,7 @@ class GuruController extends Controller
      $guru = guru::whereNip($nip)->first();
      return response([
          'guru' => $guru,
+         'message' => 'success',
      ],200);
     }
     public function update(Request $request, $nip) {
@@ -73,10 +81,12 @@ class GuruController extends Controller
     if (!$guru) {
         return response()->json(['message' => 'Guru not found'], 404);
     }
+    $akun = akun::whereNisp($nip)->first();
+    $akun['nisp'] = $request->nip;
+    $akun->update();
      $guru->update($request->all());
- 
      return response()->json([
-         'messahe' => 'Berhasil Update',
+        'message' => 'success',
          'guru' => $guru,
      ]);
     }
@@ -97,15 +107,24 @@ class GuruController extends Controller
     $guru->update($data);
  
      return response()->json([
-         'messahe' => 'Berhasil Update Password',
+         'message' => 'success',
          'guru' => $guru,
          'akun' => $akun,
      ]);
     }
-    public function delete($id) {
-     guru::whereId($id)->delete();
+    public function delete($nip) {
+        $akun = akun::whereNisp($nip)->first();
+        $guru = guru::whereNip($nip)->first();
+        if (!$guru) {
+            return response()->json(['message' => 'Guru not found'], 404);
+        }
+        if (!$akun) {
+            return response()->json(['message' => 'Akun not found'], 404);
+        }
+     guru::whereNip($nip)->delete();
+     akun::whereNisp($nip)->delete();
      return response([
-         'messahe' => 'Berhasil delete',
+         'message' => 'success',
      ],200);
     }
 }

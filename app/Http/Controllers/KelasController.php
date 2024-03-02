@@ -8,6 +8,13 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 class KelasController extends Controller
 {
+
+    public function views() {
+        
+        $kelas = kelas::all();
+        return view("admin.kelas.index", compact('kelas'));
+    }
+    
    public function index() {
    $kelas = kelas::all();
     return response([
@@ -38,17 +45,18 @@ class KelasController extends Controller
 
     return response([
         'user' => $user,
+        'message' => 'success',
     ],200);
    }
    public function show($id) {
     $kelas = kelas::whereId($id)->get();
     return response([
         'kelas' => $kelas,
+        'message' => 'success',
     ],200);
    }
    public function update(Request $request,$id) {
     $validator = Validator::make($request->all(), [
-        'kode_kelas' => 'required|max:10',
         'nama_kelas' => 'required',
         'jurusan' => 'required',
     ]);
@@ -59,14 +67,14 @@ class KelasController extends Controller
    $kelas = kelas::whereId($id)->update($data);
 
     return response([
-        'messahe' => 'Berhasil Update',
+        'message' => 'success',
         'kelas' => $kelas,
     ]);
    }
    public function delete($id) {
     kelas::whereId($id)->delete();
     return response([
-        'messahe' => 'Berhasil delete',
+        'message' => 'success',
     ],200);
    }
 }

@@ -12,7 +12,7 @@ class akun extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    
+
     protected $guarded = [];
     // protected $fillable = [
     //     'name',
@@ -35,5 +35,9 @@ class akun extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function user(){
+        return $this->hasMany(User::class);
+     }
 
 }

@@ -14,6 +14,12 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    
+    public function views() {
+        
+        $user = User::all();
+        return view("admin.siswa.index", compact('user'));
+    }
     public function index(){
         $user = User::orderBy('created_at', 'desc')->with('presensis')->get();
         return response()->json([
@@ -117,8 +123,25 @@ class UserController extends Controller
         $user->save();
     
         return response()->json([
-            'message' => 'Berhasil Update', // Memperbaiki typo pada 'message'
+            'message' => 'success', // Memperbaiki typo pada 'message'
             'user' => $user,
         ]);
     }
+    public function delete($nis) {
+        $user = User::whereNis($nis); // Perbaikan: Gunakan 'whereNis' bukan 'fint'
+        $akun = akun::whereNisp($nis); // Perbaikan: Gunakan 'find' bukan 'fint'
+        
+        if ($user) {
+            $user->delete();
+            $akun->delete();
+            return response()->json([
+                'message' => 'success',
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'User not found',
+            ], 404); // Berikan respons status 404 jika pengguna tidak ditemukan
+        }
+    }
+    
 }

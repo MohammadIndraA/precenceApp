@@ -4,12 +4,26 @@ namespace App\Http\Controllers;
 
 use App\Models\akun;
 use App\Models\guru;
+use App\Models\presensi;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Spatie\FlareClient\View;
 
 class AuthController extends Controller
 {
+  
+    public function views() {
+        $today = Carbon::now()->toDateString();
+        $user = User::all();
+        $guru = Guru::all();
+        $akun = akun::all();
+        $nows = presensi::whereDate('created_at', $today)
+        ->count();
+        return view("admin.index",compact('user','guru','akun','nows'));
+    }
     public function register(Request $request) {
       
        $request->validate([
@@ -48,6 +62,7 @@ class AuthController extends Controller
             'user' => $user,
             'akun' => $akun ,
             'token' => $token,
+            'message' => 'success',
         ],201);
     }
     public function login(Request $request) {
@@ -106,6 +121,13 @@ class AuthController extends Controller
            'user' => $user,
            'token' => $token,
        ], 200);
+       }
+       public function logout()
+       {
+        auth('akun')->logout();
+          request()->session()->invalidate();
+          request()->session()->regenerateToken();
+          return redirect('/');
        }
     
 }

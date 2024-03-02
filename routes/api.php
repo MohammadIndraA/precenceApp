@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::post('login', [AuthController::class, 'login']);
 Route::post('login/admin', [AuthController::class, 'loginAdmin']);
 // Route::post('loginGuru', [AuthController::class, 'loginGuru']);
@@ -31,6 +32,7 @@ Route::group([
     'middleware' => 'auth:sanctum'
 ],
 function() {
+  
     //Siswsa
         Route::get('users', [UserController::class, 'index']);
         Route::get('user/{nis}', [UserController::class, 'bySiswa']);
@@ -39,7 +41,7 @@ function() {
         Route::put('user/update-password/{nis}', [UserController::class, 'updatePassword']);
         Route::get('user/show/{id}', [UserController::class, 'show']);
         Route::put('user/update/{nis}', [UserController::class, 'update']);
-        Route::delete('user/delete/{id}', [UserController::class, 'delete']);
+        Route::delete('user/delete/{nis}', [UserController::class, 'delete']);
         //kelas
         Route::get('kelas', [KelasController::class, 'index']);
         Route::post('kelas/create', [KelasController::class, 'store']);
@@ -53,7 +55,7 @@ function() {
         Route::get('guru/showGuru/{nip}', [GuruController::class, 'showGuru']);
         Route::put('guru/update/{nip}', [GuruController::class, 'update']);
         Route::put('guru/updatePassword/{nip}', [GuruController::class, 'updatePassword']);
-        Route::delete('guru/delete/{id}', [GuruController::class, 'delete']);
+        Route::delete('guru/delete/{nip}', [GuruController::class, 'delete']);
         //barcode
         Route::get('barcode', [BarcodeController::class, 'index']);
         Route::get('barcode/data/{nip}', [BarcodeController::class, 'getbyGuru']);
@@ -77,8 +79,8 @@ function() {
         //akun
         Route::get('akun', [AkunController::class, 'index']);
         Route::post('akun/create/', [AkunController::class, 'store']);
-        Route::get('akun/show/{id}', [AkunController::class, 'show']);
-        Route::put('akun/update/{id}', [AkunController::class, 'update']);
-        Route::delete('akun/delete/{id}', [AkunController::class, 'delete']);
+        Route::get('akun/show/{nis}', [AkunController::class, 'show']);
+        Route::put('akun/update/{nis}', [AkunController::class, 'update']);
+        Route::delete('akun/delete/{nis}', [AkunController::class, 'delete']);
     }
 );

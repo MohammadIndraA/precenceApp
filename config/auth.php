@@ -72,10 +72,6 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
-        'gurus' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\guru::class,
-        ],
         'akuns' => [
             'driver' => 'eloquent',
             'model' => App\Models\akun::class,

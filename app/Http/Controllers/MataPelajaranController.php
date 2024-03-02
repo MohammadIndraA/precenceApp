@@ -10,6 +10,11 @@ use Illuminate\Support\Carbon as IlluminateCarbon;
 IlluminateCarbon::setLocale('id');
 class MataPelajaranController extends Controller
 {
+    public function views() {
+        
+        $mapel = mataPelajaran::all();
+        return view("admin.mapel.index", compact('mapel'));
+    }
     public function index() {
         $mata_pelajaran = mataPelajaran::all();
          return response([
@@ -21,8 +26,6 @@ class MataPelajaranController extends Controller
              'mata_pelajaran' => 'required',
              'hari' => 'required',
              'jam' => 'required',
-             'kelas_id' => 'required',
-             'guru_id' => 'required',
         ]);
         $kode = mataPelajaran::latest()->first();
         if ($kode == null) {
@@ -38,13 +41,14 @@ class MataPelajaranController extends Controller
          'mata_pelajaran' => $request->mata_pelajaran,
          'hari' =>$request->hari,
          'jam' => $request->jam,
-         'kelas_id' => $request->kelas_id,
-         'guru_id' =>$request->guru_id,
+         'kelas_id' => 0,
+         'guru_id' =>0,
         ];
         $mapel = mataPelajaran::create($data);
      
          return response([
              'mapel' => $mapel,
+             'message' => 'success',
          ],200);
         }
         public function show($id) {
@@ -63,12 +67,9 @@ class MataPelajaranController extends Controller
         }
         public function update(Request $request, $id) {
          $validator = Validator::make($request->all(), [
-            'kode_pelajaran' => 'required|max:10',
             'mata_pelajaran' => 'required',
             'hari' => 'required',
             'jam' => 'required',
-            'kelas_id' => 'required',
-            'guru_id' => 'required',
          ]);
          if ($validator->fails()) {
              return response()->json($validator->errors(), 422);
@@ -80,14 +81,14 @@ class MataPelajaranController extends Controller
          $mata_pelajaran->update($request->all());
      
          return response()->json([
-             'messahe' => 'Berhasil Update',
+             'message' => 'success',
              'mata_pelajaran' => $mata_pelajaran,
          ]);
         }
         public function delete($id) {
          mataPelajaran::whereId($id)->delete();
          return response([
-             'messahe' => 'Berhasil delete',
+            'message' => 'success',
          ],200);
         }
 }

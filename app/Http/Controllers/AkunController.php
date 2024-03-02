@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Validator;
 
 class AkunController extends Controller
 {
+    
+    public function views() {
+        $akun = akun::with('user')->get();
+        return view("admin.akun.index",compact('akun'));
+    }
     public function index() {
         $akun = akun::all();
          return response([
@@ -46,12 +51,14 @@ class AkunController extends Controller
         }
          return response([
              'akun' => $akun,
+             'message' => 'success',
          ],200);
         }
-        public function show($id) {
-         $akun = akun::whereId($id)->get();
+        public function show($nis) {
+         $akun = akun::whereNisp($nis)->get();
          return response([
              'akun' => $akun,
+             'message' => 'success',
          ],200);
         }
         public function showakun($id) {
@@ -60,30 +67,46 @@ class AkunController extends Controller
              'akun' => $akun,
          ],200);
         }
-        public function update(Request $request, $id) {
+        public function update(Request $request, $nis) {
          $validator = Validator::make($request->all(), [
-            'nikp' => 'required|max:10',
-             'password' => 'required',
+            'nisp' => 'required|max:20',
              'level' => 'required',
          ]);
          if ($validator->fails()) {
              return response()->json($validator->errors(), 422);
          }
-        $akun = akun::find($id);
+        $akun = akun::whereNisp($nis)->first();
+        $guru = guru::whereNip($nis)->first();
+        $siswa = User::whereNis($nis)->first();
         if (!$akun) {
             return response()->json(['message' => 'Post not found'], 404);
         }
-         $akun->update($request->all());
+        if ($akun->level == "Siswa") {
+            $akun->update($request->all());
+            $siswa['nis'] = $request->nisp;
+            $siswa->update();
+        }else{
+            $akun->update($request->all());
+            $guru['nip'] = $request->nisp;
+            $guru->update();
+        }
      
          return response()->json([
-             'messahe' => 'Berhasil Update',
+             'message' => 'success',
              'akun' => $akun,
          ]);
         }
-        public function delete($id) {
-         akun::whereId($id)->delete();
+        public function delete($nis) {
+        $akun = akun::whereNisp($nis)->first();
+            if ($akun->level == "Siswa") {
+                akun::whereNisp($nis)->delete();
+                User::whereNis($nis)->delete();
+            }else{
+                akun::whereNisp($nis)->delete();
+                guru::whereNip($nis)->delete();
+            }
          return response([
-             'messahe' => 'Berhasil delete',
+             'message' => 'success',
          ],200);
         }
 }
