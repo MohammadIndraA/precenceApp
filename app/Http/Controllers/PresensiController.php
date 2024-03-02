@@ -40,21 +40,50 @@ class PresensiController extends Controller
             $nomorLama = "+62" . substr($nomorLama, 1);
         }
 
-        // Hasilnya akan menjadi "+6287722430557"
-        $nomorBaru = $nomorLama;
+          // Hasilnya akan menjadi "+6287722430557"
+          $nomorBaru = $nomorLama;
+          // $nomorBaru = $nomorLama;
+          $id = "4940";
+          $key = "088551370db812bfb19d0e9d18c9cb5d7b7b4869";
+           $data = [
+                  'to' => $nomorBaru,
+                  'msg' => "Pada hari senin tanggal $d , {$user['nama_lengkap']} hadir pada pelajaran {$mapel['mata_pelajaran']}",
+              ];
+  
+              $url = "https://onyxberry.com/services/wapi/Client/sendMessage";
+              $url = $url . '/' . $id . '/' . $key;
+              
+              $ch = curl_init($url);
+              curl_setopt($ch, CURLOPT_POST, 1);
+              curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+              curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+              curl_setopt($ch, CURLOPT_HEADER, 0);
+              curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  
+              $response = curl_exec($ch);
+             
+              curl_close($ch);
+              // // Menggunakan Guzzle untuk menjalankan URL
+              $client = new Client();
+              $res = $client->get($url);
+  
+  
+        // // Hasilnya akan menjadi "+6287722430557"
+        // TWILO
         // $nomorBaru = $nomorLama;
-        $sid    = getenv("TWILIO_AUTH_SID");
-        $token  = getenv("TWILIO_AUTH_TOKEN");
-        $wa_from= getenv("TWILIO_WHATSAPP_FROM");
-        $twilio = new Client($sid, $token);
-         $body = "Pada hari senin tanggal $d , {$user['nama_lengkap']} hadir pada pelajaran {$mapel['mata_pelajaran']}";
-        $message = $twilio->messages
-        ->create("whatsapp:$nomorBaru", // to
-            array(
-              "from" => "whatsapp:+14155238886",
-              "body" => $body,
-            )
-          );
+        // // $nomorBaru = $nomorLama;
+        // $sid    = getenv("TWILIO_AUTH_SID");
+        // $token  = getenv("TWILIO_AUTH_TOKEN");
+        // $wa_from= getenv("TWILIO_WHATSAPP_FROM");
+        // $twilio = new Client($sid, $token);
+        //  $body = "Pada hari senin tanggal $d , {$user['nama_lengkap']} hadir pada pelajaran {$mapel['mata_pelajaran']}";
+        // $message = $twilio->messages
+        // ->create("whatsapp:$nomorBaru", // to
+        //     array(
+        //       "from" => "whatsapp:+14155238886",
+        //       "body" => $body,
+        //     )
+        //   );
             
         // //  Mengambil parameter 'target' dan 'token' dari URL
         // $target = $user['no_telepon_ortu'];
@@ -67,7 +96,7 @@ class PresensiController extends Controller
              'presensi' => $bar,
              'user' => $user,
              'guru' => $guru,
-             'respon' => $message->sid
+            'response' =>  $res->getBody()->getContents(),
          ],200);
         
         }
