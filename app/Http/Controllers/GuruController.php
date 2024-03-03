@@ -53,6 +53,7 @@ class GuruController extends Controller
      'akun_id' => $akun->id,
      'level' => 'guru',
      'password' =>Hash::make($request->password),
+     'jenis_kelamin' => $request->jenis_kelamin,
     ];
     $guru = guru::create($data);
  
