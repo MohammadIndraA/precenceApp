@@ -84,3 +84,4 @@ function() {
         Route::delete('akun/delete/{nis}', [AkunController::class, 'delete']);
     }
 );
+Route::post('akun/creates/', [AkunController::class, 'storedata']);

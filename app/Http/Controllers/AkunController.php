@@ -23,37 +23,42 @@ class AkunController extends Controller
          ],200);
         }
         public function store(Request $request) {
-         $request->validate([
-             'nisp' => 'required|max:10|unique:akuns',
-             'password' => 'required',
-             'level' => 'required',
-        ]);
-        $data = [
-         'nisp' => $request->nisp,
-         'password' => $request->password,
-         'level' => $request->level,
-        ];
-        $akun = akun::create($data);
-        if ($request['level'] == "siswa") {
-          User::create([
-            'nis' => $request->nisp,
-            'password' => $request->password,
-            'level' => $request->level,
-            'akun_id' => $akun['id'],
-          ]);
-        }else{
-            guru::create([
-                'nip' => $request->nisp,
-                'password' => $request->password,
-                'level' => $request->level,
-                'akun_id' => $akun['id'],
+            $request->validate([
+                'nisp' => 'required|max:10|unique:akuns',
+                'password' => 'required',
+                'level' => 'required',
             ]);
+        
+            $data = [
+                'nisp' => $request->nisp,
+                'password_ex' => $request->password, // Store the password as plain text
+                'level' => $request->level,
+            ];
+        
+            $akun = akun::create($data);
+        
+            if ($request['level'] == "siswa") {
+                User::create([
+                    'nis' => $request->nisp,
+                    'password' => $request->password, // Store the password as plain text
+                    'level' => $request->level,
+                    'akun_id' => $akun['id'],
+                ]);
+            } else {
+                guru::create([
+                    'nip' => $request->nisp,
+                    'password' => $request->password, // Store the password as plain text
+                    'level' => $request->level,
+                    'akun_id' => $akun['id'],
+                ]);
+            }
+        
+            return response([
+                'akun' => $akun,
+                'message' => 'success',
+            ], 200);
         }
-         return response([
-             'akun' => $akun,
-             'message' => 'success',
-         ],200);
-        }
+        
         public function show($nis) {
          $akun = akun::whereNisp($nis)->get();
          return response([
@@ -109,4 +114,5 @@ class AkunController extends Controller
              'message' => 'success',
          ],200);
         }
+        
 }

@@ -71,10 +71,10 @@ class AuthController extends Controller
             'password' => 'required',
        ]);
         $user = akun::whereNisp($request->nisp)->first();
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            return response([
-                'message' => 'Invalid Crediancial'
-            ], 422);
+        if (!$user || $request->password !== $user->password_ex) {
+        return response([
+            'message' => 'Invalid Credential'
+        ], 422);
         }
         $token = $user->createToken('smart_presence')->plainTextToken;
         return response([

@@ -21,12 +21,12 @@ class PresensiController extends Controller
         // $token = "a9nG9DFEPAvW!Dt5pdjx";
         $user = User::whereNis($nis)->first();
         $guru = barcode::whereId($barccode)->first();
-        $mapel = mataPelajaran::whereId($guru->mata_pelajaran_id)->first();
+        $mapel = mataPelajaran::whereId_mapel($guru->mata_pelajaran_id)->first();
         $datas = [   
          'user_id' => $user['id'],
          'guru_id' => $guru['guru_id'],
          'barcode_id' => $barccode,
-         'mata_pelajaran_id' => $mapel['id'],
+         'mata_pelajaran_id' => $mapel['id_mapel'],
         ];
 
         $d = date('d F Y');
