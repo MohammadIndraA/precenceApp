@@ -25,7 +25,7 @@ class AkunController extends Controller
         public function store(Request $request) {
             $request->validate([
                 'nisp' => 'required|max:10|unique:akuns',
-                'password' => 'required',
+                'password_ex' => 'required',
                 'level' => 'required',
             ]);
         
