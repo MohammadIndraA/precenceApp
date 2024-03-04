@@ -38,7 +38,7 @@ class AuthController extends Controller
      
        $akun = akun::create([
         'nisp' => $request->nis,
-        'password_ex' => $request->password,
+        'password_ex' => $request->password_ex,
         'level' => 'siswa',
        ]);
        $akuns = akun::whereNisp($akun->nisp)->first();
