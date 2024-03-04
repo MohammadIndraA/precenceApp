@@ -19,6 +19,6 @@ class presensi extends Model
         return $this->belongsTo(barcode::class);
      }
      public function mata_pelajaran(){
-        return $this->belongsTo(mataPelajaran::class, 'id_mapel');
+        return $this->belongsTo(mataPelajaran::class, 'id', 'id_mapel');
      }
 }
