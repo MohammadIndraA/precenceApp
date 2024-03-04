@@ -33,12 +33,12 @@ class AuthController extends Controller
             'nama_ortu' => 'required',
             'no_telepon_ortu' => 'required|max:15',
             'alamat_lengkap' => 'required',
-            'password' => 'required',
+            'password_ex' => 'required',
        ]);
      
        $akun = akun::create([
         'nisp' => $request->nis,
-        'password' => Hash::make($request->password),
+        'password_ex' => $request->password,
         'level' => 'siswa',
        ]);
        $akuns = akun::whereNisp($akun->nisp)->first();
