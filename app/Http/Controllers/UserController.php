@@ -39,7 +39,6 @@ class UserController extends Controller
             ->where('user_id', $user->id)
             ->whereDate('created_at', $d) 
             ->latest()->get();
-
         return response()->json([
             'presence' => $presence,
         ]);
