@@ -104,13 +104,15 @@ class GuruController extends Controller
     $data = [
         'password' => Hash::make($request->password),
     ];
-    $akun->update($data);
+    $akuns = akun::whereNisp($nip)->update([
+        'password_ex' =>$request->password,
+    ]);
     $guru->update($data);
  
      return response()->json([
          'message' => 'success',
          'guru' => $guru,
-         'akun' => $akun,
+         'akun' => $akuns,
      ]);
     }
     public function delete($nip) {

@@ -89,7 +89,7 @@ class UserController extends Controller
         //     'password' =>Hash::make($request->password),
         // ]);
         $akun = akun::whereNisp($nis)->update([
-            'password' =>Hash::make($request->password),
+            'password_ex' =>$request->password,
         ]);
         if (!$akun) {
             return response()->json(['message' => 'akun not found'], 404);
