@@ -15,7 +15,7 @@ class barcode extends Model
      }
    
     public function mata_pelajaran(){
-        return $this->belongsTo(mataPelajaran::class);
+        return $this->belongsTo(mataPelajaran::class, 'id', 'id_mapel');
      }
     public function user(){
         return $this->belongsTo(User::class);

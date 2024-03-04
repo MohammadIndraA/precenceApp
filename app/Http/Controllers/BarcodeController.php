@@ -13,10 +13,10 @@ class BarcodeController extends Controller
         // get per guru
 
         public function getbyGuru($nip) {
-            $day = date('y-m-d');
+            $day = date('Y-m-d');
             // dd($day);
             $guru = guru::whereNip($nip)->first();
-            $data = barcode::with('mata_pelajaran')->where('guru_id',$guru->id)->where('tanggal_barcode' ,$day)->orderBy('created_at', 'desc')->get();
+            $data = barcode::with('mata_pelajaran')->where('guru_id',$guru->id)->whereDate('tanggal_barcode' ,$day)->orderBy('created_at', 'desc')->get();
             return response([
                 'presensi' => $data,
             ],200);
