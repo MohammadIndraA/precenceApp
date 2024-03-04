@@ -60,7 +60,7 @@ class MataPelajaranController extends Controller
         public function showPerDay() {
         $hariIni = Carbon::now()->isoFormat('dddd');
         // dd($hariIni);
-         $mata_pelajaran = mataPelajaran::where('hari',$hariIni)->first();
+         $mata_pelajaran = mataPelajaran::where('hari',$hariIni)->get();
          return response([
              'mata_pelajaran' => $mata_pelajaran,
          ],200);
